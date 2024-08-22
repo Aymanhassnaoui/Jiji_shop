@@ -15,5 +15,20 @@ services:
     ports:
       - "8081:80"
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8082:80"
+    environment:
+      PMA_HOST: database
+      PMA_USER: ${MYSQL_USER:-symfony}
+      PMA_PASSWORD: ${MYSQL_PASSWORD:-ChangeMe}
+   
+
 volumes:
   db-data:
+
+
+  app-network:
+    driver: bridge
+
