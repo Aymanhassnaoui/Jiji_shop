@@ -1,0 +1,30 @@
+{# templates/pagination/custom_pagination.html.twig #}
+
+{% if pageCount > 1 %}
+    <div class="block-27">
+        <ul>
+            {# Lien vers la page précédente #}
+            {% if previous is defined %}
+                <li><a href="{{ path(route, query|merge({(pageParameterName): previous})) }}">&lt;</a></li>
+            {% else %}
+                <li class="disabled"><span>&lt;</span></li>
+            {% endif %}
+
+            {# Liens vers chaque page #}
+            {% for page in pagesInRange %}
+                {% if page != current %}
+                    <li><a href="{{ path(route, query|merge({(pageParameterName): page})) }}">{{ page }}</a></li>
+                {% else %}
+                    <li class="active"><span>{{ page }}</span></li>
+                {% endif %}
+            {% endfor %}
+
+            {# Lien vers la page suivante #}
+            {% if next is defined %}
+                <li><a href="{{ path(route, query|merge({(pageParameterName): next})) }}">&gt;</a></li>
+            {% else %}
+                <li class="disabled"><span>&gt;</span></li>
+            {% endif %}
+        </ul>
+    </div>
+{% endif %}
