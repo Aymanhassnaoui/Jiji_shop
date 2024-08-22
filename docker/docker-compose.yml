@@ -1,0 +1,19 @@
+version: '3'
+services:
+  database:
+    image: mysql:${MYSQL_VERSION:-8.0}-oracle
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-ChangeMe}
+      MYSQL_USER: ${MYSQL_USER:-symfony}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ChangeMe}
+    volumes:
+      - db-data:/var/lib/mysql:rw
+
+  app:
+    image: 66a21bc484c055c0b85795f10066939c489dee15100db3e38bb6ef5917b8fcab
+    ports:
+      - "8081:80"
+
+volumes:
+  db-data:
