@@ -11,7 +11,7 @@ services:
       - db-data:/var/lib/mysql:rw
 
   app:
-    image: 66a21bc484c055c0b85795f10066939c489dee15100db3e38bb6ef5917b8fcab
+    image: 2163b3ac5c1b5844fb5bf7976c1b0bb82104b5242294745cbfc48ccd3ecc6b72  
     ports:
       - "8081:80"
 

@@ -21,7 +21,9 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN cd /var/www && composer install
 
 RUN chown -R www-data:www-data /var/www/var && \
-    chmod -R 775 /var/www/var
+    chmod -R 775 /var/www/var && \
+    chown -R www-data:www-data /var/www/public/ && \
+    chmod -R 775 /var/www/public/
 
 WORKDIR /var/www/
 
