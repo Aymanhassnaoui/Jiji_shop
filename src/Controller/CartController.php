@@ -57,4 +57,13 @@ class CartController extends AbstractController
 
         return $this->redirectToRoute('app_cart');
     }
+
+ /**
+     * @Route("/cart/remove/{id}", name="remove_produit_id")
+     */
+    public function remove(Cart $cart, $id): Response
+    {
+        $cart->remove($id);
+        return $this->redirectToRoute('app_cart');
+    }
 }

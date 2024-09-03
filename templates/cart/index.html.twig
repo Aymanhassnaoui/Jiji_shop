@@ -45,7 +45,7 @@
 						    <tbody>
 							{% for produit in cart %}
 						      <tr class="text-center">
-						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
+						        <td class="product-remove"><a href={{ path('remove_produit_id', {id: produit.produit.id}) }}><span class="ion-ios-close"></span></a></td>
 						        
 						        <td class="image-prod"><img class="img" src={{ produit.produit.photo }} alt=""></div></td>
 						        
@@ -97,7 +97,7 @@
 						        <td class="image-prod"><img class="img" src={{ produit.produit.photo }} alt=""></div></td>
 						        
 						        <td class="product-name">
-						        	<h3>Nike Free RN 2019 iD</h3>
+						        	<h3>Nike Free RN 2019 </h3>
 						        	<p>{{ produit.produit.description }}</p>
 						        </td>
 						        
