@@ -47,12 +47,15 @@
 		            	</div>
 		            </div>
 		            <div class="w-100"></div>
-		            <div class="col-md-6">
-		            	<div class="form-group">
-	                	<label for="streetaddress">Street Address</label>
-	                  <input type="text" class="form-control" placeholder="House number and street name">
-	                </div>
-		            </div>
+		  <div class="col-md-6">
+    <div class="form-group">
+        <label for="streetaddress">Stree</label>
+        <!-- Ajout de l'ID pour cibler le champ avec le JS -->
+        <input id="address" type="text" class="form-control" placeholder="House number and street name" autocomplete="off">
+        <!-- Ajout de la boîte pour les suggestions d'adresses -->
+        <div id="addressSuggestions"></div>
+    </div>
+</div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
 	                  <input type="text" class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
@@ -88,3 +91,10 @@
 	{{form_end(form)}}
 	
 	{% endblock %}
+
+{% block script %}
+  
+
+   
+
+{% endblock %}

@@ -27,10 +27,11 @@
 	
 	
 			<div class="container">
-		  
+	
+
 				<div class="row">
     			<div class="col-md-12 ftco-animate">
-    				<div class="cart-list">
+    				<div >
 	    				<table class="table">
 						    <thead class="thead-primary">
 						      <tr class="text-center">
@@ -38,12 +39,19 @@
 						        <th>&nbsp;</th>
 						        <th>Product</th>
 						        <th>Price</th>
+								<th>Discount</th>
 						        <th>Quantity</th>
 						        <th>Total</th>
 						      </tr>
 						    </thead>
 						    <tbody>
 							{% for produit in cart %}
+ 
+		  {% set total = 0 %}
+
+							
+    {% set promo = (produit.produit.prix * produit.produit.discount) / 100 %}
+    {% set total = produit.produit.prix  - promo %}
 						      <tr class="text-center">
 						        <td class="product-remove"><a href={{ path('remove_produit_id', {id: produit.produit.id}) }}><span class="ion-ios-close"></span></a></td>
 						        
@@ -55,14 +63,14 @@
 						        </td>
 						        
 						        <td class="price">${{ (produit.produit.prix / 100)  | number_format(2, ',', ' ') }}</td>
-						        
+						         <td class="total">{{ (produit.produit.Discount)  | number_format(2, ',', ' ') }}%</td>
 						        <td class="quantity">
 						        	<div class="input-group mb-3">
 					             	<input type="text" name="quantity" class="quantity form-control input-number" value={{ produit.quantity }} min="1" max="100">
 					          	</div>
 					          </td>
 						        
-						        <td class="total">{{ (produit.quantity *  produit.produit.prix / 100)  | number_format(2, ',', ' ') }}$</td>
+						        <td class="total">{{ (produit.quantity *  total / 100)  | number_format(2, ',', ' ') }}$</td>
 						      </tr><!-- END TR-->
 							  {% endfor %}
 						    </tbody>
@@ -77,7 +85,7 @@
 		  
 				<div class="row">
     			<div class="col-md-12 ftco-animate">
-    				<div class="cart-list">
+    				<div >
 	    				<table class="table">
 						    <thead class="thead-primary">
 						      <tr class="text-center">
@@ -85,70 +93,101 @@
 						        <th>&nbsp;</th>
 						        <th>Product</th>
 						        <th>Price</th>
+								<th>Discount</th>
 						        <th>Quantity</th>
 						        <th>Total</th>
 						      </tr>
+							  
 						    </thead>
 						    <tbody>
-							{% for produit in cart %}
-						      <tr class="text-center">
-						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-						        
-						        <td class="image-prod"><img class="img" src={{ produit.produit.photo }} alt=""></div></td>
-						        
-						        <td class="product-name">
-						        	<h3>Nike Free RN 2019 </h3>
-						        	<p>{{ produit.produit.description }}</p>
-						        </td>
-						        
-						        <td class="price">${{ (produit.produit.prix / 100)  | number_format(2, ',', ' ') }}</td>
-						        
-						        <td class="quantity">
-						        	<div class="input-group mb-3">
-					             	<input type="text" name="quantity" class="quantity form-control input-number" value={{ produit.quantity }} min="1" max="100">
-					          	</div>
-					          </td>
-						        
-						        <td class="total">{{ (produit.quantity *  produit.produit.prix / 100)  | number_format(2, ',', ' ') }}$</td>
-						      </tr><!-- END TR-->
-							  {% endfor %}
 						    </tbody>
+						
 						  </table>
 					  </div>
     			</div>
 				
     		</div>
-{% endif %}
-    		
 
+	<h1 class="text-center bg-light p-3 rounded shadow-lg">
+    Votre panier est vide
+</h1>
+
+{% endif %}
+   {% set total = 0 %}
+   					{% set Total = 0 %}
+					 {% set subtotal = 0 %} 
+					  {% set total_quantity = 0 %} 
+					  {% set setDelivery = 0 %} 
+					   {% set setDiscount = 0 %} 
+					   {% set total2 = 0 %} 
+
+
+ {% for produit in cart %}
+               
+                {% set produit_total = (produit.produit.prix / 100) * produit.quantity %}
+                {% set subtotal = subtotal + produit_total %}
+
+				
+
+				{% set total_quantity = total_quantity + produit.quantity %}
+
+				 {% set setDelivery = 2 * total_quantity  %}
+
+				
+
+
+				 {% if produit.produit.discount  is  not empty %}  
+
+
+      {% set setDiscount = produit.produit.discount  *   total_quantity  %}
+
+	  
+				 {% endif %}
+
+    
+    {% set total1 =   ((setDiscount  *   subtotal ) / 100 )  %}
+
+	 {% set total2 = subtotal -  total1 %}
+
+
+	  {% set Total = (setDelivery + total2)  %}
+				
+            {% endfor %}
+    		
+  <pre>
+					
+				 </pre>
 			<div class="row justify-content-start">
     			<div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
     				<div class="cart-total mb-3">
     					<h3>Cart Totals</h3>
     					<p class="d-flex">
     						<span>Subtotal</span>
-    						<span>$20.60</span>
+    						<span>{{ subtotal | number_format(2, ',', ' ') }} $</span>
     					</p>
     					<p class="d-flex">
     						<span>Delivery</span>
-    						<span>$0.00</span>
+    						<span>{{setDelivery | number_format(2, ',', ' ') }}  $</span>
     					</p>
     					<p class="d-flex">
     						<span>Discount</span>
-    						<span>$3.00</span>
+    						<span>{{setDiscount}} %</span>
+    					</p>
+
+
+						<p class="d-flex">
+    						<span> Subtotal - Discount</span>
+    						<span>{{total2}}$</span>
     					</p>
     					<hr>
 
 						
-    					{% set total = 0 %}
+   
 
-{% for item in cart %}
-    {% set total = total + (item.produit.prix * item.quantity) %}
-{% endfor %}
 
 <p class="d-flex total-price">
     <span>Total</span>
-    <span>{{ (total/100) | number_format(2, ',', ' ') }} $</span>
+    <span>{{ (Total ) | number_format(2, ',', ' ') }} $</span>
 </p>
     				</div>
     				<p class="text-center"><a href="/chekout" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>

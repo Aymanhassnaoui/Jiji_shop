@@ -23,7 +23,8 @@ class CartController extends AbstractController
      */
     public function index(cart $cart): Response
     {
-      
+        // dd ($cart->getfull());
+        
 
 
         return $this->render(
