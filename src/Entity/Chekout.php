@@ -62,6 +62,33 @@ class Chekout
      */
     private $total;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $adresse;
+
+
+     /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $numeroTelephone;
+
+
+
+     /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
+    private $email;
+
+
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $desAdresse;
+
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -169,4 +196,55 @@ class Chekout
 
         return $this;
     }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(string $adresse): self
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+
+    public function getNumeroTelephone(): ?string
+    {
+        return $this->numeroTelephone;
+    }
+
+    public function setNumeroTelephone(?string $numeroTelephone): self
+    {
+        $this->numeroTelephone = $numeroTelephone;
+
+        return $this;
+    }
+
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getDesAdresse(): ?string
+    {
+        return $this->desAdresse;
+    }
+    
+    public function setDesAdresse(?string $desAdresse): self
+    {
+        $this->desAdresse = $desAdresse;
+    
+        return $this;
+    }
 }
+

@@ -25,17 +25,26 @@ class CommandeController extends AbstractController
     #[Route('/commande', name: 'app_commande')]
     public function index( cart $cart , Request $request): Response
     {
-        $form = $this->createForm(CommandeType::class, null ,[
-            'user' => $this->getUser(),
-          
-        ]);
+      $user = $this->getUser();
 
-        $form->handleRequest($request);
-       
+    // Récupérer les informations de la commande en cours depuis la session ou la base de données
+    $chekout = $this->entityManager->getRepository(Chekout::class)->findOneBy(['user' => $user], ['id' => 'DESC']);
+    
+    // Si aucune commande n'existe encore, rediriger vers la page de checkout
+    if (!$chekout) {
+        return $this->redirectToRoute('app_reservation');
+    } 
+  
+    $produits = $cart->getfull();
 
+        
         return $this->render('commande/index.html.twig', [
-            'form'=>$form->createView(),
-            'cart'=>$cart->getfull(),
+          'nom' => $chekout->getNom(),
+        'prenom' => $chekout->getPrenom(),
+        'adresse' => $chekout->getAdresse(),
+        'quantity' => $chekout->getquantity(),
+        
+            
                    ]);
     }
 
@@ -44,29 +53,56 @@ class CommandeController extends AbstractController
  */
 public function chekout(cart $cart, Request $request) 
 {   
+ 
+
+
+  if (!$cart->getfull()) {
+    return $this->redirectToRoute('app_cart');
+} 
+
     $chekout = new Chekout();
     $form = $this->createForm(ChekoutType::class, $chekout);
     
     $form->handleRequest($request);
-    $date = new \DateTime();
-    $reference = $date->format('dmy') . '-' . uniqid();
-    $chekout->setReference($reference);
+  
+
     
     if ($form->isSubmitted() && $form->isValid()) {
-        foreach ($cart->getfull() as $Produits) {
-            $chekout = new Chekout(); // Nouvelle instance pour chaque produit
-            $chekout->setUser($this->getUser());
+        $data = $form->getData();     
+      
+
+      foreach ($cart->getfull() as $Produits) {
+
+              $chekout->setUser($this->getUser());
+
+              $existingChekout = $this->entityManager->getRepository(Chekout::class)->findOneBy([
+                'user' => $this->getUser(),
+                'produit' => $Produits['produit']
+            ]);
+            if ($existingChekout) {
+            
+              $chekout = $existingChekout;
+          } 
            
-            $chekout->setReference($reference);
             $chekout->setProduit($Produits['produit']);
             $chekout->setQuantity($Produits['quantity']);
             $chekout->setPrix($Produits['produit']->getPrix());
             $chekout->setTotal($Produits['produit']->getPrix() * $Produits['quantity']);
-            $chekout->setNom('Nom par défaut'); // Vous pouvez remplacer par la valeur appropriée
-            $chekout->setPrenom('Prenom par défaut');
+           
+            $chekout->setNom($data->getNom());
+            $chekout->setPrenom($data->getPrenom());
+            $chekout->setAdresse($data->getAdresse());
+
+            $chekout->setNumeroTelephone($data->getNumeroTelephone());
+            $chekout->setEmail($data->getEmail());
+            $chekout->setDesAdresse($data->getDesAdresse());
+            $date = new \DateTime();
+            $reference = $date->format('dmy') . '-' . uniqid();
+            $chekout->setReference($reference);
             
             $this->entityManager->persist($chekout);
         }
+      
         $this->entityManager->flush();
         return $this->redirectToRoute('app_commande');
     }
@@ -74,7 +110,8 @@ public function chekout(cart $cart, Request $request)
     return $this->render('reservation/reservation.html.twig', [
         'form' => $form->createView(),
         'cart' => $cart->getfull(),
-        'reference' => $chekout->getReference()
+        'reference' => $chekout->getReference(),
+  
     ]);
 }
 

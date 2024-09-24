@@ -193,22 +193,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->Chekout;
     }
 
-    public function addReservation(Reservation $reservation): self
+    public function addChekout(Chekout $chekout): self
     {
-        if (!$this->Chekout->contains($reservation)) {
-            $this->Chekout[] = $reservation;
-            $reservation->setUser($this);
+        if (!$this->Chekout->contains($chekout)) {
+            $this->Chekout[] = $chekout;
+            $chekout->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeReservation(Reservation $reservation): self
+    public function removeChekout(Chekout $chekout): self
     {
-        if ($this->Chekout->removeElement($reservation)) {
+        if ($this->Chekout->removeElement($chekout)) {
             // set the owning side to null (unless already changed)
-            if ($reservation->getUser() === $this) {
-                $reservation->setUser(null);
+            if ($chekout->getUser() === $this) {
+                $chekout->setUser(null);
             }
         }
 
